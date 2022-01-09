@@ -62,8 +62,8 @@ void loop() {
 
 
 }
-uint8_t _sMin = 33;
-uint8_t _sHr = 11;
+uint8_t _sMin = 0;
+uint8_t _sHr = 18;
 TestEventItem::TestEventItem(uint8_t eP1, uint8_t eP2, const char * name){
   _event = new uint8_t[2];
   _event[0] = eP1;
