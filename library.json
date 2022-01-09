@@ -11,7 +11,7 @@
   "authors":
   [
     {
-      "name": "esp8266_events",
+      "name": "Grellard Adrien",
       "email": "grellard.adrien@gmail.com"
     }
   ],
@@ -20,7 +20,18 @@
         "owner": "Fabrice Weinberg",
         "name": "NTPClient",
         "version": "^3.0.0"
+    },
+    {
+        "owner": "Benoit Blanchon",
+        "name": "ArduinoJson",
+        "version": "^6.19.0"
+    },
+    {
+        "owner": "Grellard Adrien",
+        "name": "Wificonnect",
+        "version": "^0.0.0"
     }
+
   ],
   "frameworks": "arduino",
   "platforms": "espressif8266"
