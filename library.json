@@ -1,0 +1,27 @@
+{
+  "name": "esp8266_events",
+  "version": "0.0.1",
+  "description": "This is a library for creating timed based schedules(NTP) for the ESP8266",
+  "keywords": "scheduler, time, ntp",
+  "repository":
+  {
+    "type": "git",
+    "url": "https://github.com/AdriLighting/esp8266_events.git"
+  },
+  "authors":
+  [
+    {
+      "name": "esp8266_events",
+      "email": "grellard.adrien@gmail.com"
+    }
+  ],
+  "dependencies": [
+    {
+        "owner": "Fabrice Weinberg",
+        "name": "NTPClient",
+        "version": "^3.0.0"
+    }
+  ],
+  "frameworks": "arduino",
+  "platforms": "espressif8266"
+}
