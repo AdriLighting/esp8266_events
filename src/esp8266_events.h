@@ -25,10 +25,10 @@
         DU TEXTE POUR DEBUG C MIEUX
     */
     static const char EVT_free                  [] PROGMEM = "";
-    static const char EVT_day                       [] PROGMEM = "triggerDay";
+    static const char EVT_day                   [] PROGMEM = "triggerDay";
 
     static const char EVT_triggerTimePass       [] PROGMEM = "TriggerTime is passed, set current day to today, waiting different day";
-    static const char EVT_eventSetup                [] PROGMEM = "Event setup";
+    static const char EVT_eventSetup            [] PROGMEM = "Event setup";
     static const char EVT_eventChecker          [] PROGMEM = "Event trigger";
     static const char EVT_eventSetTime          [] PROGMEM = "Event set new time";
     static const char EVT_triggerTimeSet        [] PROGMEM = "TriggerTime is waiting, set current day to -1,";
@@ -94,13 +94,13 @@
         uint8_t _sec; 
 
         /** \brief jour prévu pour le déclenchement */
-        int         _triggerDay;
+        int _triggerDay;
 
         /** \brief mise a jour du jour prévu pour le déclenchement */
-        bool        _triggerDay_setup;
+        bool _triggerDay_setup;
 
         /** \brief activation/désactivation de la fonction trigger de l'event */
-        bool        _activate;
+        bool _activate;
 
         /** \brief type de periode de l'event */
         EVENT_PERIOD _period;
@@ -132,12 +132,12 @@
          * @param[in]  period      
          */
         void set_data( uint8_t hr, uint8_t  min, uint8_t sec, int triggerDay, bool activate, EVENT_PERIOD period  ) { 
-            this->_hr                   = hr;
-            this->_min                  = min;
-            this->_sec                  = sec;
-            this->_triggerDay       = triggerDay;
-            this->_activate         = activate;
-            this->_period               = period;
+            this->_hr         = hr;
+            this->_min        = min;
+            this->_sec        = sec;
+            this->_triggerDay = triggerDay;
+            this->_activate   = activate;
+            this->_period     = period;
         }   
 
         /**
@@ -160,10 +160,10 @@
     private:
 
         /** \brief  */
-        uint32_t                            _timer_ntp_test;
+        uint32_t _timer_ntp_test;
 
         /** \brief postion of instance array */
-        uint8_t                             _pos                        = 0;        
+        uint8_t _pos = 0;        
 
         /** \brief ptr ver l'inctance NTPClient */
         /*
@@ -171,16 +171,16 @@
                 passer pour une fonction pour recuperer le ptr
                 referencer le ptr via la class event
         */
-        NTPClient                           * _timeClient   = nullptr;
+        NTPClient * _timeClient   = nullptr;
 
         /** \brief ptr ver l'instance EventData instancier par l'event */
-        EventData                           * _data                 = nullptr;
+        EventData * _data = nullptr;
 
         /** \brief callback function w/ */
-        trigger_func                    _trigger_func   = NULL;
+        trigger_func _trigger_func   = NULL;
 
         /** \brief callback function w/ */
-        callback_function_t     _trigger_func_t = nullptr;
+        callback_function_t _trigger_func_t = nullptr;
     public:
         Event();
         ~Event();
@@ -223,13 +223,13 @@
     private:
 
         /** \brief array dynamique des instance event */
-        Event           * _eventArray   = nullptr;      
+        Event * _eventArray = nullptr;      
 
         /** \brief taille de l'array */     
-        uint8_t         _count              = 0;
-
+        uint8_t _count = 0;
+ 
         /** \brief INUTILE ???? */
-        NTPClient   * _timeClient;
+        NTPClient * _timeClient;
     public:
 
         EventManager(NTPClient * Tc, uint8_t maxCnt = 2);
