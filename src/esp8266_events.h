@@ -1,11 +1,34 @@
+/*
+    MIT License
+
+    Copyright (c) 2021 Adrien Grellard
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
+*/
 /**
  * @file      esp8266_events.h
  *
  * @brief     main file
  * @see       https://github.com/AdriLighting
  * 
- * @author    AdriLighting   
- * @date      sam. 08 janv. 2022 18:40:11
+ * @author    Adrien Grellard   
+ * @date      sam. 08 dec. 2021 18:40:11
  *
  */
 
@@ -77,7 +100,7 @@
      * @brief           class pour les information de declenchement des event
      * @see             https://github.com/AdriLighting/
      * 
-     * @author      Adrilighting
+     * @author      Adrien Grellard 
      * @date        sam. 08 janv. 2022 18:46:23
      */
     class EventData {
@@ -152,7 +175,7 @@
      * @brief           class de geestion pour chaque event 
      * @see             https://github.com/AdriLighting/
      * 
-     * @author      Adrilighting
+     * @author      Adrien Grellard 
      * @date        sam. 08 janv. 2022 18:46:23
      */ 
     class Event
@@ -215,7 +238,7 @@
      * @brief           class de geestion general par event(s)
      * @see             https://github.com/AdriLighting/
      * 
-     * @author      Adrilighting
+     * @author      Adrien Grellard 
      * @date        sam. 08 janv. 2022 18:46:23
      */ 
     class EventManager

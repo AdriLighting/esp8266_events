@@ -1,11 +1,34 @@
+/*
+    MIT License
+
+    Copyright (c) 2021 Adrien Grellard
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
+*/
 /**
  * @file      esp8266_events.cpp
  *
  * @brief     main file
  * @see       https://github.com/AdriLighting
  * 
- * @author    AdriLighting   
- * @date      sam. 08 janv. 2022 18:40:11
+ * @author    Adrien Grellard   
+ * @date      sam. 08 dec. 2021 18:40:11
  *
  */
 
@@ -15,7 +38,7 @@
  * @brief       timestamp du nombre total de seconde (hr*3600) + (min*60) + sec
  * @see     https://github.com/AdriLighting/
  *
- * @author  AdriLighting
+ * @author  Adrien Grellard 
  * @date    sam. 08 janv. 2022 18:40:11
  * 
  * @param[in]  hr    heure
@@ -36,7 +59,7 @@ time_t makeTime(uint8_t hr, uint8_t min, uint8_t sec){
  * @brief       instance pour un simple event
  * @see     https://github.com/AdriLighting/
  *
- * @author  AdriLighting
+ * @author  Adrien Grellard 
  * @date    sam. 08 janv. 2022 18:40:11
  */
 Event::Event(){
@@ -47,7 +70,7 @@ Event::Event(){
  * @brief       statu wifi
  * @see     https://github.com/AdriLighting/
  *
- * @author  AdriLighting
+ * @author  Adrien Grellard 
  * @date    sam. 08 janv. 2022 18:40:11
  * 
  * @return  true if connected to routeur
@@ -69,7 +92,7 @@ bool Event::wiFiIsConnected() {
  * @brief       debug event
  * @see     https://github.com/AdriLighting/
  *
- * @author  AdriLighting
+ * @author  Adrien Grellard 
  * @date    sam. 08 janv. 2022 18:40:11
  * @param[in]  pos   position du type de debug demander
  */
@@ -79,8 +102,8 @@ void Event::debug(uint8_t pos){
     uint8_t period  = 0;
 
     switch (pos) {
-        case 0:pos_1 = 1;                           break;
-        case 1:pos_1 = 2;                           break;
+        case 0:pos_1 = 1;               break;
+        case 1:pos_1 = 2;               break;
         case 2:pos_1 = 3; pos_2 = 4;    break;
         case 3:pos_1 = 3; pos_2 = 0;    break;
         case 4:pos_1 = 1; pos_2 = 4;    break;
@@ -121,13 +144,13 @@ void Event::debug_current(){
  * @brief       check evvent trigger
  * @see     https://github.com/AdriLighting/
  *
- * @author  AdriLighting
+ * @author  Adrien Grellard 
  * @date    sam. 08 janv. 2022 18:40:11
  */
 void Event::check(){
-    if (_data == nullptr)                   return;
-    if (_timeClient == nullptr)         return;
-    if (!wiFiIsConnected())                 return;
+    if (_data == nullptr)           return;
+    if (_timeClient == nullptr)     return;
+    if (!wiFiIsConnected())         return;
     if (!_timeClient->isTimeSet())  return;
 
     time_t _now;
@@ -172,8 +195,8 @@ void Event::check(){
                 timestamp du nombre total de seconde du tempsEvent et du tempsActuelle
                     (hr*3600) + (min*60) + sec
             */
-            _now            = makeTime(_timeClient->getHours(), _timeClient->getMinutes(), _timeClient->getSeconds());
-            _evtTime    = makeTime(_data->_hr, _data->_min, _data->_sec);
+            _now      = makeTime(_timeClient->getHours(), _timeClient->getMinutes(), _timeClient->getSeconds());
+            _evtTime  = makeTime(_data->_hr, _data->_min, _data->_sec);
 
             /*
                 if      l'heure prevu pour le declenchement de l'alarme est anterieur a l'heure actuelle
@@ -232,7 +255,7 @@ void Event::check(){
  * @brief       Sets the time on event.
  * @see     https://github.com/AdriLighting/
  *
- * @author  AdriLighting
+ * @author  Adrien Grellard 
  * @date    sam. 08 janv. 2022 18:40:11
  * 
  * @param[in]  hr    
@@ -249,14 +272,14 @@ void Event::set_time(uint8_t hr, uint8_t min){
     }
 
     if (_data->_period == DAILYREPEAT) {
-            _data->_hr                  = hr;
-            _data->_min                 = min;  
+            _data->_hr    = hr;
+            _data->_min   = min;  
             /*
             timestamp du nombre total de seconde du tempsEvent et du tempsActuelle
                 (hr*3600) + (min*60) + sec
             */
-            time_t _now             = makeTime(_timeClient->getHours(), _timeClient->getMinutes(), _timeClient->getSeconds());
-            time_t _evtTime     = makeTime(_data->_hr, _data->_min, _data->_sec);
+            time_t _now     = makeTime(_timeClient->getHours(), _timeClient->getMinutes(), _timeClient->getSeconds());
+            time_t _evtTime = makeTime(_data->_hr, _data->_min, _data->_sec);
             /*
                 if      l'heure prevu pour le declenchement de l'alarme est anterieur a l'heure actuelle
                                 l'alarme doit etre inactive est prévu pour un autre jour
@@ -289,7 +312,7 @@ void Event::set_time(uint8_t hr, uint8_t min){
  * @brief   get data from event instance with a dynmaic new intsance of EventData
  * @see     https://github.com/AdriLighting/
  *
- * @author  AdriLighting
+ * @author  Adrien Grellard 
  * @date    sam. 08 janv. 2022 18:40:11
  * 
  * @param      intance temporaire EventData
@@ -305,27 +328,27 @@ uint8_t Event::get_data( EventData * data ) {
  * @brief       pas encor utiliser ?????????
  * @see     https://github.com/AdriLighting/
  *
- * @author  AdriLighting
+ * @author  Adrien Grellard 
  * @date    sam. 08 janv. 2022 18:40:11
  * 
  * @param   reference of JsonObject source
  */
 void Event::get_data(JsonObject & doc) { 
-    doc[F("hr")]                    = _data->_hr;
-    doc[F("min")]               = _data->_min;
-    doc[F("sec")]                   = _data->_sec;
-    doc[F("triggerday")]    = _data->_triggerDay;
-    doc[F("activate")]      = _data->_activate;
-    doc[F("pos")]                   = _pos;
+    doc[F("hr")]          = _data->_hr;
+    doc[F("min")]         = _data->_min;
+    doc[F("sec")]         = _data->_sec;
+    doc[F("triggerday")]  = _data->_triggerDay;
+    doc[F("activate")]    = _data->_activate;
+    doc[F("pos")]         = _pos;
 }
 
 /*
     SETTER
 */
-void Event::set_NTPClient(NTPClient * Tc)                       { _timeClient = Tc;}
-void Event::set_pos(uint8_t p)                                          { _pos = p;}
-void Event::set_activate(bool p)                                        { _data->_activate = p;}
-void Event::set_triggerFunc(trigger_func f)                 { _trigger_func = f;}
+void Event::set_NTPClient(NTPClient * Tc)           { _timeClient = Tc;}
+void Event::set_pos(uint8_t p)                      { _pos = p;}
+void Event::set_activate(bool p)                    { _data->_activate = p;}
+void Event::set_triggerFunc(trigger_func f)         { _trigger_func = f;}
 void Event::set_triggerFunc(callback_function_t f)  { _trigger_func_t = f;}
 
 void Event::data_print(){
@@ -340,7 +363,7 @@ void Event::data_print(){
  * @brief      Constructs a new instance. (insatnce déstinée a un usage unique)
  * @see     https://github.com/AdriLighting/
  *
- * @author  AdriLighting
+ * @author  Adrien Grellard 
  * @date    sam. 08 janv. 2022 18:40:11
  * 
  * @param      ptr ver linstance NTPClient
@@ -361,21 +384,21 @@ EventManager::EventManager(NTPClient * Tc, uint8_t maxCnt){
 /*
     GETTER
 */
-uint8_t EventManager::get_data(uint8_t p,  EventData * f)               { return _eventArray[p].get_data(f);}
+uint8_t EventManager::get_data(uint8_t p,  EventData * f) { return _eventArray[p].get_data(f);}
 
 /*
     SETTER
 */  
-void EventManager::set_triggerFunc(uint8_t p, trigger_func f)                   { _eventArray[p].set_triggerFunc(f);}
-void EventManager::set_triggerFunc(uint8_t p, callback_function_t f)    { _eventArray[p].set_triggerFunc(f);}
-void EventManager::set_time(uint8_t p, uint8_t hr, uint8_t min)             { _eventArray[p].set_time(hr, min); }
-void EventManager::set_activate(uint8_t p, bool v)                                      { _eventArray[p].set_activate(v);       }
+void EventManager::set_triggerFunc(uint8_t p, trigger_func f)         { _eventArray[p].set_triggerFunc(f);}
+void EventManager::set_triggerFunc(uint8_t p, callback_function_t f)  { _eventArray[p].set_triggerFunc(f);}
+void EventManager::set_time(uint8_t p, uint8_t hr, uint8_t min)       { _eventArray[p].set_time(hr, min); }
+void EventManager::set_activate(uint8_t p, bool v)                    { _eventArray[p].set_activate(v);       }
 
 /**
  * @brief   backgroud for all events trigger
  * @see     https://github.com/AdriLighting/
  *
- * @author  AdriLighting
+ * @author  Adrien Grellard 
  * @date    sam. 08 janv. 2022 18:40:11
  */
 void EventManager::loop(){
