@@ -56,7 +56,7 @@ time_t makeTime(uint8_t hr, uint8_t min, uint8_t sec){
 }
 
 /**
- * @brief       instance pour un simple event
+ * @brief   instance pour un simple event
  * @see     https://github.com/AdriLighting/
  *
  * @author  Adrien Grellard 
@@ -67,7 +67,7 @@ Event::Event(){
 }
 
 /**
- * @brief       statu wifi
+ * @brief   statu wifi
  * @see     https://github.com/AdriLighting/
  *
  * @author  Adrien Grellard 
@@ -89,7 +89,7 @@ bool Event::wiFiIsConnected() {
   6 sam
 */
 /**
- * @brief       debug event
+ * @brief   debug event
  * @see     https://github.com/AdriLighting/
  *
  * @author  Adrien Grellard 
@@ -141,7 +141,7 @@ void Event::debug_current(){
 }
 
 /**
- * @brief       check evvent trigger
+ * @brief   check evvent trigger
  * @see     https://github.com/AdriLighting/
  *
  * @author  Adrien Grellard 
@@ -252,7 +252,7 @@ void Event::check(){
 }
 
 /**
- * @brief       Sets the time on event.
+ * @brief   Sets the time on event.
  * @see     https://github.com/AdriLighting/
  *
  * @author  Adrien Grellard 
@@ -325,7 +325,7 @@ uint8_t Event::get_data( EventData * data ) {
 }
 
 /**
- * @brief       pas encor utiliser ?????????
+ * @brief   pas encor utiliser ?????????
  * @see     https://github.com/AdriLighting/
  *
  * @author  Adrien Grellard 
@@ -360,7 +360,7 @@ void Event::data_print(){
 
 
 /**
- * @brief      Constructs a new instance. (insatnce déstinée a un usage unique)
+ * @brief   Constructs a new instance. (insatnce déstinée a un usage unique)
  * @see     https://github.com/AdriLighting/
  *
  * @author  Adrien Grellard 
