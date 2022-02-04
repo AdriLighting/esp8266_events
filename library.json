@@ -21,12 +21,12 @@
     {
         "owner": "Fabrice Weinberg",
         "name": "NTPClient",
-        "version": "^3.0.0"
+        "version": "https://github.com/arduino-libraries/NTPClient.git@^3.0.0"
     },
     {
         "owner": "Benoit Blanchon",
         "name": "ArduinoJson",
-        "version": "^6.19.0"
+        "version": "https://github.com/bblanchon/ArduinoJson.git@^6.19.0"
     },
     {
         "owner": "Grellard Adrien",
