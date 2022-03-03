@@ -2,7 +2,7 @@
   "name": "esp8266_events",
   "version": "0.0.1",
   "license": "MIT",
-  "description": "This is a library for creating timed based schedules(NTP) for the ESP8266",
+  "description": "Esp8266 library for creating time-based(NTP) events(alarms) ",
   "keywords": "scheduler, time, ntp",
   "repository":
   {
