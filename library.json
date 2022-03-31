@@ -30,8 +30,8 @@
     },
     {
         "owner": "Grellard Adrien",
-        "name": "Wificonnect",
-        "version": "https://github.com/AdriLighting/wificonnect.git"
+        "name": "esp_wificonnect",
+        "version": "https://github.com/AdriLighting/esp_wificonnect.git"
     }
 
   ],

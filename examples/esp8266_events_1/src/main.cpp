@@ -7,7 +7,7 @@
 #include <WiFiUdp.h>
 
 #include <esp8266_events.h>
-#include <Wificonnect.h>
+#include <alwificonnect.h>
 
 WifiConnect * _DeviceWifi;
 
