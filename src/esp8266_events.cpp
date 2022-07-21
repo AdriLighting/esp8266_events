@@ -34,8 +34,19 @@
 
 #include "esp8266_events.h"
 
+ #ifndef ALTIMESYNC_ENABLED
+  AL_getTime::AL_getTime(){
+    set_cb_time( +[](){return 0;},    0);  
+    set_cb_time( +[](){return 0;},   1);
+    set_cb_time( +[](){return 0;}, 2);
+    set_cb_time( +[](){return 0;}, 3);
+    set_cb_getFormattedTime( +[](){return "";});  
+    set_cb_isTimeSet( +[](){return false;} );
+  }
+#endif
+
 /**
- * @brief       timestamp du nombre total de seconde (hr*3600) + (min*60) + sec
+ * @brief   timestamp du nombre total de seconde (hr*3600) + (min*60) + sec
  * @see     https://github.com/AdriLighting/
  *
  * @author  Adrien Grellard 
@@ -47,7 +58,7 @@
  *
  * @return  (hr*3600) + (min*60) + sec
  */
-time_t makeTime(uint8_t hr, uint8_t min, uint8_t sec){   
+time_t Event::makeTime(uint8_t hr, uint8_t min, uint8_t sec){   
   uint32_t seconds = 0;
   seconds+= hr * SECS_PER_HOUR;
   seconds+= min * SECS_PER_MIN;
@@ -150,7 +161,7 @@ void Event::debug_current(){
 void Event::check(){
     if (_data == nullptr)           return;
     if (_timeClient == nullptr)     return;
-    if (!wiFiIsConnected())         return;
+    // if (!wiFiIsConnected())         return;
     if (!_timeClient->isTimeSet())  return;
 
     time_t _now;
@@ -231,11 +242,11 @@ void Event::check(){
         /* on attend un jour different */
         if (_data->_triggerDay != _timeClient->getDay())  {
             /* timeStamp pour comparaison */
-            _now            = makeTime(_timeClient->getHours(), _timeClient->getMinutes(), _timeClient->getSeconds());
-            _evtTime    = makeTime(_data->_hr, _data->_min, _data->_sec);
+            _now      = makeTime(_timeClient->getHours(), _timeClient->getMinutes(), _timeClient->getSeconds());
+            _evtTime  = makeTime(_data->_hr, _data->_min, _data->_sec);
             if(_evtTime <=_now){
                 /* si le temp tempsEvent == tempsActuelle */
-                if ((_timeClient->getHours() == _data->_hr)&&(_timeClient->getMinutes() == _data->_min)&&(_timeClient->getSeconds() == _data->_sec)){
+                if ((_timeClient->getHours() == _data->_hr) && (_timeClient->getMinutes() == _data->_min) && (_timeClient->getSeconds() == _data->_sec)){
                     /* 
                         rendre l'alarme inactive pour le jour actuele 
                             (set _triggerDay avec le jour actuelle) 
@@ -243,8 +254,8 @@ void Event::check(){
                     _data->_triggerDay = _timeClient->getDay();
                     debug(1);
                     /* declenchment de la fonction si referencer */
-                    if (_data->_activate && _trigger_func!=NULL) {_trigger_func();yield();}
-                    else if (_data->_activate && _trigger_func_t!=nullptr) {_trigger_func_t();yield();}
+                    // if (_data->_activate && _trigger_func!=NULL) {_trigger_func();yield();}
+                    if (_data->_activate && _trigger_func_t!=nullptr) {_trigger_func_t();yield();}
                 }
             }
         }
@@ -261,8 +272,12 @@ void Event::check(){
  * @param[in]  hr    
  * @param[in]  min   
  */
-void Event::set_time(uint8_t hr, uint8_t min){
+void Event::set_time(const time_t t){
     if (_data == nullptr) return;
+
+    uint8_t hr, min;
+    hr = AL_timeHelper::get_hours(t);
+    min = AL_timeHelper::get_minutes(t);
 
     if (!wiFiIsConnected()) {
         _data->_hr      = hr;
@@ -304,6 +319,7 @@ void Event::set_time(uint8_t hr, uint8_t min){
                 debug(2);   
             }
 
+            _data->_triggerDay_setup = false; 
         // }    
     }
 }
@@ -345,10 +361,10 @@ void Event::get_data(JsonObject & doc) {
 /*
     SETTER
 */
-void Event::set_NTPClient(NTPClient * Tc)           { _timeClient = Tc;}
+void Event::set_NTPClient(AL_getTime * Tc)          { _timeClient = Tc;}
 void Event::set_pos(uint8_t p)                      { _pos = p;}
 void Event::set_activate(bool p)                    { _data->_activate = p;}
-void Event::set_triggerFunc(trigger_func f)         { _trigger_func = f;}
+// void Event::set_triggerFunc(trigger_func f)         { _trigger_func = f;}
 void Event::set_triggerFunc(callback_function_t f)  { _trigger_func_t = f;}
 
 void Event::data_print(){
@@ -366,10 +382,10 @@ void Event::data_print(){
  * @author  Adrien Grellard 
  * @date    sam. 08 janv. 2022 18:40:11
  * 
- * @param      ptr ver linstance NTPClient
+ * @param      ptr ver linstance AL_getTime
  * @param[in]  taille de l'array des instance d'event
  */
-EventManager::EventManager(NTPClient * Tc, uint8_t maxCnt){
+EventManager::EventManager(AL_getTime * Tc, uint8_t maxCnt){
     _timeClient = Tc;                                   // A SUPPRIMER ???
     _eventArray = new Event[maxCnt];    // array of events insatnce
     _count = maxCnt;                                    // size
@@ -389,9 +405,9 @@ uint8_t EventManager::get_data(uint8_t p,  EventData * f) { return _eventArray[p
 /*
     SETTER
 */  
-void EventManager::set_triggerFunc(uint8_t p, trigger_func f)         { _eventArray[p].set_triggerFunc(f);}
+// void EventManager::set_triggerFunc(uint8_t p, trigger_func f)         { _eventArray[p].set_triggerFunc(f);}
 void EventManager::set_triggerFunc(uint8_t p, callback_function_t f)  { _eventArray[p].set_triggerFunc(f);}
-void EventManager::set_time(uint8_t p, uint8_t hr, uint8_t min)       { _eventArray[p].set_time(hr, min); }
+void EventManager::set_time(uint8_t p, const time_t t)                { _eventArray[p].set_time(t); }
 void EventManager::set_activate(uint8_t p, bool v)                    { _eventArray[p].set_activate(v);       }
 
 /**

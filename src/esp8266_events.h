@@ -35,47 +35,92 @@
 #ifndef ESP8266_EVENTS_H
 #define ESP8266_EVENTS_H
 
-    #include <Arduino.h>
-    #include <ArduinoJson.h>
-    #include <ESP8266WiFi.h>
-    #include <NTPClient.h>
+  #include <Arduino.h>
+  #include <ArduinoJson.h>
+  #if defined(ESP8266)
+    #include <ESP8266WiFi.h>  
+  #elif defined(ESP32)
+    #include <WiFi.h>
+  #endif
+  #include <altoolslib.h>
+  // #include <NTPClient.h>
 
-    #define SECS_PER_MIN  ((time_t)(60UL))
-    #define SECS_PER_HOUR ((time_t)(3600UL))
+  #define SECS_PER_MIN  ((time_t)(60UL))
+  #define SECS_PER_HOUR ((time_t)(3600UL))
 
-    // #######################################################################
-    /*
-        DU TEXTE POUR DEBUG C MIEUX
-    */
-    static const char EVT_free                  [] PROGMEM = "";
-    static const char EVT_day                   [] PROGMEM = "triggerDay";
+  // #######################################################################
+  /*
+      DU TEXTE POUR DEBUG C MIEUX
+  */
+  static const char EVT_free                  [] PROGMEM = "";
+  static const char EVT_day                   [] PROGMEM = "triggerDay";
 
-    static const char EVT_triggerTimePass       [] PROGMEM = "TriggerTime is passed, set current day to today, waiting different day";
-    static const char EVT_eventSetup            [] PROGMEM = "Event setup";
-    static const char EVT_eventChecker          [] PROGMEM = "Event trigger";
-    static const char EVT_eventSetTime          [] PROGMEM = "Event set new time";
-    static const char EVT_triggerTimeSet        [] PROGMEM = "TriggerTime is waiting, set current day to -1,";
-    static const char* const EVT_T[] PROGMEM = {
-        EVT_triggerTimePass, 
-        EVT_eventSetup, 
-        EVT_eventChecker, 
-        EVT_eventSetTime, 
-        EVT_triggerTimeSet
-    };
+  static const char EVT_triggerTimePass       [] PROGMEM = "TriggerTime is passed, set current day to today, waiting different day";
+  static const char EVT_eventSetup            [] PROGMEM = "Event setup";
+  static const char EVT_eventChecker          [] PROGMEM = "Event trigger";
+  static const char EVT_eventSetTime          [] PROGMEM = "Event set new time";
+  static const char EVT_triggerTimeSet        [] PROGMEM = "TriggerTime is waiting, set current day to -1,";
+  static const char* const EVT_T[] PROGMEM = {
+    EVT_triggerTimePass, 
+    EVT_eventSetup, 
+    EVT_eventChecker, 
+    EVT_eventSetTime, 
+    EVT_triggerTimeSet
+  };
 
-    static const char EVT_period_weeklyR        [] PROGMEM = "WeeklyRepeat";
-    static const char EVT_period_weekly         [] PROGMEM = "Weekly";
-    static const char EVT_period_dailyR         [] PROGMEM = "DailyReapeat";
-    static const char EVT_period_daily          [] PROGMEM = "Dayly";   
-    static const char* const EVT_PERIOD_T[] PROGMEM = {
-        EVT_period_weeklyR, 
-        EVT_period_weekly, 
-        EVT_period_dailyR, 
-        EVT_period_daily
-    };
+  static const char EVT_period_weeklyR        [] PROGMEM = "WeeklyRepeat";
+  static const char EVT_period_weekly         [] PROGMEM = "Weekly";
+  static const char EVT_period_dailyR         [] PROGMEM = "DailyReapeat";
+  static const char EVT_period_daily          [] PROGMEM = "Dayly";   
+  static const char* const EVT_PERIOD_T[] PROGMEM = {
+    EVT_period_weeklyR, 
+    EVT_period_weekly, 
+    EVT_period_dailyR, 
+    EVT_period_daily
+  };
     //
     // #######################################################################
 
+
+#ifndef ALTIMESYNC_ENABLED
+  class AL_getTime {
+    template<class X>
+    using callback_t = X(*)();    
+
+    callback_t<int>     cb_getDay           = nullptr;
+    callback_t<int>     cb_getHours         = nullptr;
+    callback_t<int>     cb_getMinutes       = nullptr;
+    callback_t<int>     cb_getSeconds       = nullptr;
+    callback_t<bool>    cb_isTimeSet        = nullptr;
+    callback_t<String>  cb_getFormattedTime = nullptr;
+  public:
+    AL_getTime();
+    ~AL_getTime(){};
+
+    template<class X>
+    void set_cb_time(callback_t<X> f, uint8_t pos) {
+     switch (pos) {
+       case 0: cb_getDay           = std::move(f); break;
+       case 1: cb_getHours         = std::move(f); break;
+       case 2: cb_getMinutes       = std::move(f); break;
+       case 3: cb_getSeconds       = std::move(f); break;
+       default:break;
+     }
+    }
+     template<class X>
+     void set_cb_isTimeSet(callback_t<X> f) {cb_isTimeSet = std::move(f);}
+     template<class X>
+     void set_cb_getFormattedTime(callback_t<X> f) {cb_getFormattedTime = std::move(f);}
+
+     int    getDay()            {if (cb_getDay)     return cb_getDay();     else return -1;};
+     int    getHours()          {if (cb_getHours)   return cb_getHours();   else return -1;};
+     int    getMinutes()        {if (cb_getMinutes) return cb_getMinutes(); else return -1;};
+     int    getSeconds()        {if (cb_getSeconds) return cb_getSeconds(); else return -1;};
+     bool   isTimeSet()         {if (cb_isTimeSet)  return cb_isTimeSet();  else return false;};
+     String getFormattedTime()  {if (cb_getFormattedTime)  return cb_getFormattedTime(); else return "";};
+     
+   };   
+#endif 
 
     /**
      * mod des events
@@ -84,14 +129,14 @@
      */
     typedef enum _EVENT_PERIOD
     {
-        DAILYREPEAT,
-        WEEKLYREPEAT
+      DAILYREPEAT,
+      WEEKLYREPEAT
     } EVENT_PERIOD;
 
     /*
         triger function
     */
-    typedef void (*trigger_func)();  
+    // typedef void (*trigger_func)();  
     typedef std::function<void()> callback_function_t;
 
     /**
@@ -169,6 +214,8 @@
         ~EventData(){;}
     };
 
+
+
     /**
      * @class       Event
      * 
@@ -194,34 +241,36 @@
                 passer pour une fonction pour recuperer le ptr
                 referencer le ptr via la class event
         */
-        NTPClient * _timeClient   = nullptr;
+        AL_getTime * _timeClient   = nullptr;
 
         /** \brief ptr ver l'instance EventData instancier par l'event */
         EventData * _data = nullptr;
 
         /** \brief callback function w/ */
-        trigger_func _trigger_func   = NULL;
+        // trigger_func _trigger_func   = NULL;
 
         /** \brief callback function w/ */
         callback_function_t _trigger_func_t = nullptr;
+
+        time_t makeTime(uint8_t hr, uint8_t min, uint8_t sec);
     public:
         Event();
-        ~Event();
+        ~Event(){};
 
         void data_print();
 
         void check();
 
-        void set_NTPClient(NTPClient * Tc);
+        void set_NTPClient(AL_getTime * Tc);
         void set_pos(uint8_t p);
 
         uint8_t get_data(EventData * data );
         void get_data(JsonObject & doc);
 
-        void set_time(uint8_t hr, uint8_t min);
+        void set_time(const time_t t);
         void set_activate(bool v);
 
-        void set_triggerFunc(trigger_func f);
+        // void set_triggerFunc(trigger_func f);
         void set_triggerFunc(callback_function_t f);
 
         void debug(uint8_t p);
@@ -252,19 +301,19 @@
         uint8_t _count = 0;
  
         /** \brief INUTILE ???? */
-        NTPClient * _timeClient;
+        AL_getTime * _timeClient;
     public:
 
-        EventManager(NTPClient * Tc, uint8_t maxCnt = 2);
+        EventManager(AL_getTime * Tc, uint8_t maxCnt = 2);
         ~EventManager(){};
 
         void loop();
 
         uint8_t get_data(uint8_t p,  EventData * f);
 
-        void set_triggerFunc(uint8_t p, trigger_func f);
+        // void set_triggerFunc(uint8_t p, trigger_func f);
         void set_triggerFunc(uint8_t p, callback_function_t f);
-        void set_time(uint8_t p, uint8_t hr, uint8_t min);
+        void set_time(uint8_t p, time_t t);
         void set_activate(uint8_t p, bool v);
     
     };
